@@ -33,3 +33,7 @@ Thumbs.db
 
 # envfiles
 config.*.yml
+
+# security tools
+.dcignore
+main

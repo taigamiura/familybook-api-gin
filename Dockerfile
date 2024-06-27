@@ -5,7 +5,9 @@ RUN --mount=type=cache,target=/go/pkg/mod/ \
     go mod download
 
 FROM base AS dev
-RUN go install github.com/air-verse/air@latest
+RUN --mount=type=cache,target=/root/.cache/go-build \
+    go install github.com/air-verse/air@latest
+# RUN go install github.com/air-verse/air@latest
 COPY . .
 CMD ["air", "-c", ".air.toml"]
 
@@ -16,7 +18,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     GOOS=linux CGO_ENABLED=0 go build \
     -ldflags="-s -w" \
     -trimpath \
-    -o main ./cmd/api/main.go
+    -o main ./src/cmd/api/main.go
 
 FROM debian:bullseye-slim AS runner
 COPY --from=builder /usr/src/app/main /usr/src/app/main
